@@ -1,0 +1,573 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sensor | Monitoring IoT</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#0f172a;
+  color:white;
+}
+
+.app-shell{
+  display:flex;
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  width:250px;
+  background:#111827;
+  padding:20px;
+}
+
+.sidebar-brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:30px;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.sidebar-brand img{
+  width:40px;
+}
+
+.sidebar-nav{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.sidebar-nav a,
+.logout{
+  text-decoration:none;
+  color:#cbd5e1;
+  padding:12px;
+  border-radius:10px;
+  transition:.3s;
+  border:none;
+  background:none;
+  cursor:pointer;
+  text-align:left;
+  font-size:15px;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav .active,
+.logout:hover{
+  background:#7c3aed;
+  color:white;
+}
+
+/* MAIN */
+
+.main{
+  flex:1;
+  padding:30px;
+}
+
+/* HEADER */
+
+.sensor-banner{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+
+.sensor-banner p{
+  color:#94a3b8;
+  margin-top:6px;
+}
+
+.live-status{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#1e293b;
+  padding:12px 18px;
+  border-radius:999px;
+  font-weight:bold;
+}
+
+.pulse{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#22c55e;
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+
+  0%{
+    box-shadow:0 0 0 0 rgba(34,197,94,.7);
+  }
+
+  100%{
+    box-shadow:0 0 0 15px rgba(34,197,94,0);
+  }
+
+}
+
+/* STATUS */
+
+.sensor-status{
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:25px;
+}
+
+.status-item{
+  background:#1e293b;
+  padding:15px 20px;
+  border-radius:16px;
+  min-width:180px;
+}
+
+.status-item strong{
+  display:block;
+  margin-top:5px;
+}
+
+/* CARDS */
+
+.sensor-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+}
+
+.sensor-card{
+  position:relative;
+  overflow:hidden;
+  background:#1e293b;
+  border-radius:24px;
+  padding:24px;
+  border:1px solid rgba(255,255,255,.05);
+  transition:.3s;
+}
+
+.sensor-card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:4px;
+  background:#7c3aed;
+}
+
+.sensor-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 15px 35px rgba(124,58,237,.25);
+}
+
+.sensor-label{
+  color:#94a3b8;
+}
+
+.sensor-value{
+  font-size:42px;
+  font-weight:700;
+  margin:15px 0;
+}
+
+.badge{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+}
+
+.online{
+  background:rgba(34,197,94,.15);
+  color:#22c55e;
+}
+
+.warning{
+  background:rgba(245,158,11,.15);
+  color:#f59e0b;
+}
+
+.progress{
+  margin-top:15px;
+  height:8px;
+  background:#0f172a;
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.progress-fill{
+  height:100%;
+  background:#7c3aed;
+}
+
+/* PANEL */
+
+.panel{
+  margin-top:25px;
+  background:#1e293b;
+  border-radius:24px;
+  padding:25px;
+}
+
+.panel-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.panel-header select{
+  background:#111827;
+  color:white;
+  border:none;
+  padding:10px;
+  border-radius:10px;
+}
+
+canvas{
+  max-height:350px;
+}
+
+/* TABLE */
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th{
+  background:#111827;
+  color:#cbd5e1;
+  padding:15px;
+  text-align:left;
+}
+
+td{
+  padding:15px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+tr:hover{
+  background:rgba(255,255,255,.03);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+  .sidebar{
+    display:none;
+  }
+
+  .main{
+    padding:20px;
+  }
+
+  .sensor-banner{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:15px;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+
+    <div class="sidebar-brand">
+      <img src="img/logo.png" alt="Logo">
+      MonitoringIoT
+    </div>
+
+    <nav class="sidebar-nav">
+
+      <a href="dashboard.html">📊 Dashboard</a>
+      <a href="sensor.html" class="active">🌡 Sensor</a>
+      <a href="riwayat.html">📈 Riwayat</a>
+      <a href="pengaturan.html">⚙ Pengaturan</a>
+
+      <button id="logoutBtn" class="logout">
+        ↩ Keluar
+      </button>
+
+    </nav>
+
+  </aside>
+
+  <main class="main">
+
+    <div class="sensor-banner">
+
+      <div>
+        <h1>Sensor Monitoring</h1>
+        <p>Pantau seluruh data sensor secara realtime.</p>
+      </div>
+
+      <div class="live-status">
+        <span class="pulse"></span>
+        LIVE
+      </div>
+
+    </div>
+
+    <div class="sensor-status">
+
+      <div class="status-item">
+        📡 Sensor Aktif
+        <strong>4 Sensor</strong>
+      </div>
+
+      <div class="status-item">
+        🟢 Status Sistem
+        <strong>Online</strong>
+      </div>
+
+      <div class="status-item">
+        🕒 Update Terakhir
+        <strong id="lastUpdate">--</strong>
+      </div>
+
+    </div>
+
+    <section class="sensor-grid">
+
+      <div class="sensor-card">
+
+        <div class="sensor-label">🌡 Sensor Suhu</div>
+
+        <div class="sensor-value" id="tempValue">
+          28°C
+        </div>
+
+        <span class="badge online">
+          Normal
+        </span>
+
+        <div class="progress">
+          <div class="progress-fill" style="width:70%"></div>
+        </div>
+
+      </div>
+
+      <div class="sensor-card">
+
+        <div class="sensor-label">💧 Kelembapan</div>
+
+        <div class="sensor-value" id="humidityValue">
+          75%
+        </div>
+
+        <span class="badge online">
+          Stabil
+        </span>
+
+        <div class="progress">
+          <div class="progress-fill" style="width:75%"></div>
+        </div>
+
+      </div>
+
+      <div class="sensor-card">
+
+        <div class="sensor-label">🌬 Tekanan</div>
+
+        <div class="sensor-value" id="pressureValue">
+          1008
+        </div>
+
+        <span class="badge warning">
+          Menurun
+        </span>
+
+        <div class="progress">
+          <div class="progress-fill" style="width:65%"></div>
+        </div>
+
+      </div>
+
+      <div class="sensor-card">
+
+        <div class="sensor-label">☀ Cahaya</div>
+
+        <div class="sensor-value" id="lightValue">
+          640 lx
+        </div>
+
+        <span class="badge online">
+          Cerah
+        </span>
+
+        <div class="progress">
+          <div class="progress-fill" style="width:80%"></div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="panel">
+
+      <div class="panel-header">
+
+        <h3>Grafik Sensor</h3>
+
+        <select>
+          <option>24 Jam</option>
+          <option>7 Hari</option>
+          <option>30 Hari</option>
+        </select>
+
+      </div>
+
+      <canvas id="sensorChart"></canvas>
+
+    </section>
+
+    <section class="panel">
+
+      <div class="panel-header">
+        <h3>Data Sensor Terbaru</h3>
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Waktu</th>
+              <th>Suhu</th>
+              <th>Kelembapan</th>
+              <th>Tekanan</th>
+              <th>Cahaya</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>08:00</td>
+              <td>28°C</td>
+              <td>75%</td>
+              <td>1008 hPa</td>
+              <td>640 lx</td>
+            </tr>
+
+            <tr>
+              <td>09:00</td>
+              <td>29°C</td>
+              <td>73%</td>
+              <td>1007 hPa</td>
+              <td>650 lx</td>
+            </tr>
+
+            <tr>
+              <td>10:00</td>
+              <td>30°C</td>
+              <td>72%</td>
+              <td>1006 hPa</td>
+              <td>670 lx</td>
+            </tr>
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<script>
+
+document.getElementById("logoutBtn")
+.addEventListener("click",()=>{
+
+  window.location.href="login.html";
+
+});
+
+document.getElementById("lastUpdate")
+.innerText =
+new Date().toLocaleTimeString("id-ID");
+
+const ctx =
+document.getElementById("sensorChart");
+
+new Chart(ctx,{
+
+  type:"line",
+
+  data:{
+
+    labels:[
+      "08:00",
+      "09:00",
+      "10:00",
+      "11:00",
+      "12:00",
+      "13:00"
+    ],
+
+    datasets:[
+
+      {
+        label:"Suhu",
+        data:[28,29,30,29,31,30],
+        borderColor:"#7c3aed",
+        tension:.4
+      },
+
+      {
+        label:"Kelembapan",
+        data:[75,74,73,72,74,75],
+        borderColor:"#22c55e",
+        tension:.4
+      }
+
+    ]
+
+  },
+
+  options:{
+    responsive:true
+  }
+
+});
+
+</script>
+
+</body>
+</html>
+```

@@ -1,0 +1,448 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Monitoring IoT</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#0f172a;
+  color:white;
+  overflow-x:hidden;
+}
+
+/* NAVBAR */
+
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 8%;
+  position:sticky;
+  top:0;
+  background:rgba(15,23,42,.95);
+  backdrop-filter:blur(10px);
+  z-index:100;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:bold;
+}
+
+.logo span{
+  color:#7c3aed;
+}
+
+.nav-links{
+  display:flex;
+  gap:20px;
+}
+
+.nav-links a{
+  color:#cbd5e1;
+  text-decoration:none;
+  transition:.3s;
+}
+
+.nav-links a:hover{
+  color:white;
+}
+
+.login-btn{
+  padding:12px 20px;
+  border-radius:12px;
+  background:#7c3aed;
+  color:white;
+  text-decoration:none;
+  transition:.3s;
+}
+
+.login-btn:hover{
+  background:#6d28d9;
+}
+
+/* HERO */
+
+.hero{
+  min-height:90vh;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 8%;
+  gap:50px;
+}
+
+.hero-content{
+  max-width:600px;
+}
+
+.hero-content h1{
+  font-size:60px;
+  line-height:1.2;
+  margin-bottom:20px;
+}
+
+.hero-content span{
+  color:#7c3aed;
+}
+
+.hero-content p{
+  color:#94a3b8;
+  line-height:1.8;
+  margin-bottom:30px;
+}
+
+.hero-buttons{
+  display:flex;
+  gap:15px;
+}
+
+.btn{
+  padding:14px 25px;
+  border-radius:14px;
+  text-decoration:none;
+  font-weight:bold;
+  transition:.3s;
+}
+
+.btn-primary{
+  background:#7c3aed;
+  color:white;
+}
+
+.btn-primary:hover{
+  background:#6d28d9;
+}
+
+.btn-secondary{
+  border:1px solid #334155;
+  color:white;
+}
+
+.btn-secondary:hover{
+  background:#1e293b;
+}
+
+/* DASHBOARD PREVIEW */
+
+.preview{
+  background:#1e293b;
+  border-radius:25px;
+  padding:25px;
+  width:500px;
+  box-shadow:0 20px 50px rgba(0,0,0,.3);
+}
+
+.preview-header{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+
+.status{
+  color:#22c55e;
+}
+
+.preview-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+}
+
+.card{
+  background:#111827;
+  border-radius:15px;
+  padding:20px;
+}
+
+.card small{
+  color:#94a3b8;
+}
+
+.card h3{
+  margin-top:10px;
+}
+
+/* FEATURES */
+
+.features{
+  padding:100px 8%;
+}
+
+.section-title{
+  text-align:center;
+  margin-bottom:50px;
+}
+
+.section-title h2{
+  font-size:40px;
+}
+
+.section-title p{
+  color:#94a3b8;
+  margin-top:10px;
+}
+
+.feature-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+}
+
+.feature-card{
+  background:#1e293b;
+  padding:25px;
+  border-radius:20px;
+  transition:.3s;
+}
+
+.feature-card:hover{
+  transform:translateY(-5px);
+}
+
+.feature-card h3{
+  margin:15px 0;
+}
+
+.feature-card p{
+  color:#94a3b8;
+  line-height:1.7;
+}
+
+/* CTA */
+
+.cta{
+  padding:100px 8%;
+  text-align:center;
+}
+
+.cta-box{
+  background:#1e293b;
+  border-radius:30px;
+  padding:60px;
+}
+
+.cta h2{
+  margin-bottom:15px;
+}
+
+.cta p{
+  color:#94a3b8;
+  margin-bottom:25px;
+}
+
+/* FOOTER */
+
+footer{
+  text-align:center;
+  padding:30px;
+  color:#64748b;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+  .hero{
+    flex-direction:column;
+    text-align:center;
+    padding-top:50px;
+  }
+
+  .hero-content h1{
+    font-size:40px;
+  }
+
+  .preview{
+    width:100%;
+  }
+
+  .nav-links{
+    display:none;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+  <div class="logo">
+    Monitoring<span>IoT</span>
+  </div>
+
+  <div class="nav-links">
+    <a href="#fitur">Fitur</a>
+    <a href="#tentang">Tentang</a>
+  </div>
+
+  <a href="login.html" class="login-btn">
+    Login
+  </a>
+
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+
+  <div class="hero-content">
+
+    <h1>
+      Monitoring IoT
+      <span>Realtime</span>
+      Untuk Masa Depan
+    </h1>
+
+    <p>
+      Pantau seluruh perangkat dan sensor IoT Anda
+      secara realtime melalui dashboard modern,
+      cepat, dan mudah digunakan.
+    </p>
+
+    <div class="hero-buttons">
+
+      <a href="login.html" class="btn btn-primary">
+        Mulai Sekarang
+      </a>
+
+      <a href="#fitur" class="btn btn-secondary">
+        Pelajari Lebih Lanjut
+      </a>
+
+    </div>
+
+  </div>
+
+  <div class="preview">
+
+    <div class="preview-header">
+
+      <strong>Dashboard</strong>
+
+      <span class="status">
+        ● Online
+      </span>
+
+    </div>
+
+    <div class="preview-grid">
+
+      <div class="card">
+        <small>Suhu</small>
+        <h3>28°C</h3>
+      </div>
+
+      <div class="card">
+        <small>Kelembapan</small>
+        <h3>75%</h3>
+      </div>
+
+      <div class="card">
+        <small>Tekanan</small>
+        <h3>1008 hPa</h3>
+      </div>
+
+      <div class="card">
+        <small>Cahaya</small>
+        <h3>640 lx</h3>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- FITUR -->
+
+<section class="features" id="fitur">
+
+  <div class="section-title">
+
+    <h2>Fitur Utama</h2>
+
+    <p>
+      Solusi monitoring yang lengkap untuk perangkat IoT.
+    </p>
+
+  </div>
+
+  <div class="feature-grid">
+
+    <div class="feature-card">
+      <h3>📡 Monitoring Realtime</h3>
+      <p>
+        Data sensor diperbarui secara langsung dari perangkat IoT.
+      </p>
+    </div>
+
+    <div class="feature-card">
+      <h3>📊 Dashboard Modern</h3>
+      <p>
+        Visualisasi data yang jelas dan mudah dipahami.
+      </p>
+    </div>
+
+    <div class="feature-card">
+      <h3>📈 Riwayat Data</h3>
+      <p>
+        Simpan dan lihat histori data sensor kapan saja.
+      </p>
+    </div>
+
+    <div class="feature-card">
+      <h3>⚙ Pengaturan Fleksibel</h3>
+      <p>
+        Atur notifikasi, akun, dan sistem sesuai kebutuhan.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- CTA -->
+
+<section class="cta">
+
+  <div class="cta-box">
+
+    <h2>Siap Memulai Monitoring IoT?</h2>
+
+    <p>
+      Login dan mulai memantau seluruh perangkat Anda.
+    </p>
+
+    <a href="login.html" class="btn btn-primary">
+      Masuk ke Dashboard
+    </a>
+
+  </div>
+
+</section>
+
+<footer>
+  © 2026 Monitoring IoT. All Rights Reserved.
+</footer>
+
+</body>
+</html>
+```

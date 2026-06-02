@@ -1,0 +1,759 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengaturan | Monitoring IoT</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
+
+    body{
+      background:#0f172a;
+      color:white;
+    }
+
+    .app-shell{
+      display:flex;
+      min-height:100vh;
+    }
+
+    .sidebar{
+      width:250px;
+      background:#111827;
+      padding:20px;
+    }
+
+    .sidebar-brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:30px;
+      font-weight:bold;
+      font-size:20px;
+    }
+
+    .sidebar-brand img{
+      width:40px;
+    }
+
+    .sidebar-nav{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .sidebar-nav a,
+    .logout{
+      text-decoration:none;
+      color:#cbd5e1;
+      padding:12px;
+      border-radius:10px;
+      transition:.3s;
+      border:none;
+      background:none;
+      cursor:pointer;
+      text-align:left;
+      font-size:15px;
+    }
+
+    .sidebar-nav a:hover,
+    .sidebar-nav .active,
+    .logout:hover{
+      background:#7c3aed;
+      color:white;
+    }
+
+    .main{
+      flex:1;
+      padding:30px;
+    }
+
+    .topbar{
+      margin-bottom:30px;
+    }
+
+    .topbar p{
+      color:#94a3b8;
+      margin-top:5px;
+    }
+
+    .settings-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+      gap:20px;
+    }
+
+    .card{
+      background:#1e293b;
+      padding:25px;
+      border-radius:20px;
+    }
+
+    .card h3{
+      margin-bottom:20px;
+    }
+
+    .form-group{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-bottom:20px;
+    }
+
+    .form-group label{
+      color:#cbd5e1;
+      font-size:14px;
+    }
+
+    .form-group input,
+    .form-group select{
+      padding:14px;
+      border:none;
+      border-radius:12px;
+      background:#0f172a;
+      color:white;
+      outline:none;
+    }
+
+    .form-group input::placeholder{
+      color:#94a3b8;
+    }
+
+    .switch-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:15px;
+      padding:12px;
+      background:#0f172a;
+      border-radius:12px;
+    }
+
+    .switch-row input{
+      width:20px;
+      height:20px;
+      accent-color:#7c3aed;
+    }
+
+    .btn{
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:12px;
+      background:#7c3aed;
+      color:white;
+      font-weight:bold;
+      cursor:pointer;
+      transition:.3s;
+    }
+
+    .btn:hover{
+      background:#6d28d9;
+    }
+
+    .success{
+      display:none;
+      margin-top:15px;
+      padding:12px;
+      border-radius:10px;
+      background:rgba(34,197,94,.15);
+      color:#22c55e;
+    }
+
+    @media(max-width:900px){
+
+      .sidebar{
+        display:none;
+      }
+
+      .main{
+        padding:20px;
+      }
+
+    }
+  </style>
+=======
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pengaturan | Monitoring IoT</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#0f172a;
+  color:white;
+}
+
+.app-shell{
+  display:flex;
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  width:250px;
+  background:#111827;
+  padding:20px;
+}
+
+.sidebar-brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:30px;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.sidebar-brand img{
+  width:40px;
+}
+
+.sidebar-nav{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.sidebar-nav a,
+.logout{
+  text-decoration:none;
+  color:#cbd5e1;
+  padding:12px;
+  border-radius:10px;
+  transition:.3s;
+  border:none;
+  background:none;
+  cursor:pointer;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav .active,
+.logout:hover{
+  background:#7c3aed;
+  color:white;
+}
+
+/* MAIN */
+
+.main{
+  flex:1;
+  padding:30px;
+}
+
+.page-header{
+  margin-bottom:25px;
+}
+
+.page-header h1{
+  margin-bottom:8px;
+}
+
+.page-header p{
+  color:#94a3b8;
+}
+
+/* GRID */
+
+.settings-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(380px,1fr));
+  gap:20px;
+}
+
+/* CARD */
+
+.card{
+  background:#1e293b;
+  border-radius:24px;
+  padding:24px;
+  border:1px solid rgba(255,255,255,.05);
+}
+
+.card h3{
+  margin-bottom:20px;
+}
+
+/* FORM */
+
+.form-group{
+  margin-bottom:18px;
+}
+
+.form-group label{
+  display:block;
+  margin-bottom:8px;
+  color:#cbd5e1;
+}
+
+.form-group input,
+.form-group select{
+  width:100%;
+  padding:14px;
+  border:none;
+  outline:none;
+  border-radius:12px;
+  background:#111827;
+  color:white;
+}
+
+.form-group input::placeholder{
+  color:#64748b;
+}
+
+/* SWITCH */
+
+.setting-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 0;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.setting-row:last-child{
+  border-bottom:none;
+}
+
+.switch{
+  width:50px;
+  height:26px;
+  appearance:none;
+  background:#334155;
+  border-radius:999px;
+  position:relative;
+  cursor:pointer;
+}
+
+.switch:checked{
+  background:#7c3aed;
+}
+
+.switch::before{
+  content:'';
+  position:absolute;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:white;
+  top:3px;
+  left:3px;
+  transition:.3s;
+}
+
+.switch:checked::before{
+  left:27px;
+}
+
+/* BUTTON */
+
+.save-btn{
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:14px;
+  background:#7c3aed;
+  color:white;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.save-btn:hover{
+  background:#6d28d9;
+}
+
+.success-box{
+  margin-top:15px;
+  display:none;
+  background:rgba(34,197,94,.15);
+  color:#22c55e;
+  padding:12px;
+  border-radius:12px;
+}
+
+@media(max-width:900px){
+
+  .sidebar{
+    display:none;
+  }
+
+  .main{
+    padding:20px;
+  }
+
+}
+
+</style>
+>>>>>>> a2a5284 (style)
+</head>
+
+<body>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+
+    <div class="sidebar-brand">
+      <img src="img/logo.png" alt="Logo">
+      MonitoringIoT
+    </div>
+
+    <nav class="sidebar-nav">
+<<<<<<< HEAD
+      <a href="dashboard.html">📊 Dashboard</a>
+      <a href="sensor.html">🌡 Sensor</a>
+      <a href="riwayat.html">📈 Riwayat</a>
+      <a href="pengaturan.html" class="active">⚙ Pengaturan</a>
+
+      <button id="logoutBtn" class="logout">
+        ↩ Keluar
+      </button>
+=======
+
+      <a href="dashboard.html">📊 Dashboard</a>
+      <a href="sensor.html">🌡 Sensor</a>
+      <a href="riwayat.html">📈 Riwayat</a>
+      <a href="pengaturan.html" class="active">
+        ⚙ Pengaturan
+      </a>
+
+      <button class="logout" id="logoutBtn">
+        ↩ Keluar
+      </button>
+
+>>>>>>> a2a5284 (style)
+    </nav>
+
+  </aside>
+
+  <main class="main">
+
+<<<<<<< HEAD
+    <div class="topbar">
+      <h1>Pengaturan</h1>
+      <p>Kelola profil dan konfigurasi sistem.</p>
+=======
+    <div class="page-header">
+
+      <h1>⚙ Pengaturan</h1>
+
+      <p>
+        Kelola akun dan konfigurasi Monitoring IoT.
+      </p>
+
+>>>>>>> a2a5284 (style)
+    </div>
+
+    <div class="settings-grid">
+
+      <!-- PROFIL -->
+<<<<<<< HEAD
+      <div class="card">
+
+        <h3>Profil Pengguna</h3>
+
+        <div class="form-group">
+          <label>Nama Lengkap</label>
+          <input
+            type="text"
+            id="nama"
+            placeholder="Masukkan nama lengkap"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+=======
+
+      <div class="card">
+
+        <h3>👤 Profil Pengguna</h3>
+
+        <div class="form-group">
+
+          <label>Nama Lengkap</label>
+
+          <input
+            type="text"
+            id="nama"
+            placeholder="Masukkan nama"
+          >
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Email</label>
+
+>>>>>>> a2a5284 (style)
+          <input
+            type="email"
+            id="email"
+            placeholder="Masukkan email"
+          >
+<<<<<<< HEAD
+        </div>
+
+        <button
+          id="saveProfile"
+          class="btn"
+        >
+          Simpan Profil
+        </button>
+
+        <div
+          id="profileStatus"
+          class="success"
+        >
+          Profil berhasil disimpan.
+=======
+
+        </div>
+
+      </div>
+
+      <!-- NOTIFIKASI -->
+
+      <div class="card">
+
+        <h3>🔔 Notifikasi</h3>
+
+        <div class="setting-row">
+
+          <span>Notifikasi Sensor</span>
+
+          <input
+            type="checkbox"
+            class="switch"
+            checked
+          >
+
+        </div>
+
+        <div class="setting-row">
+
+          <span>Peringatan Suhu</span>
+
+          <input
+            type="checkbox"
+            class="switch"
+            checked
+          >
+
+        </div>
+
+        <div class="setting-row">
+
+          <span>Email Alert</span>
+
+          <input
+            type="checkbox"
+            class="switch"
+          >
+
+>>>>>>> a2a5284 (style)
+        </div>
+
+      </div>
+
+      <!-- SISTEM -->
+<<<<<<< HEAD
+      <div class="card">
+
+        <h3>Pengaturan Sistem</h3>
+
+        <div class="switch-row">
+          <span>Notifikasi Sensor</span>
+          <input type="checkbox" checked>
+        </div>
+
+        <div class="switch-row">
+          <span>Auto Sync</span>
+          <input type="checkbox" checked>
+        </div>
+
+        <div class="switch-row">
+          <span>Dark Mode</span>
+          <input type="checkbox" checked>
+        </div>
+
+        <div class="form-group">
+=======
+
+      <div class="card">
+
+        <h3>🌐 Sistem</h3>
+
+        <div class="form-group">
+
+>>>>>>> a2a5284 (style)
+          <label>Bahasa</label>
+
+          <select>
+            <option>Indonesia</option>
+            <option>English</option>
+          </select>
+<<<<<<< HEAD
+        </div>
+
+        <button class="btn">
+          Terapkan Pengaturan
+        </button>
+
+=======
+
+        </div>
+
+        <div class="setting-row">
+
+          <span>Auto Sync</span>
+
+          <input
+            type="checkbox"
+            class="switch"
+            checked
+          >
+
+        </div>
+
+      </div>
+
+      <!-- KEAMANAN -->
+
+      <div class="card">
+
+        <h3>🔒 Keamanan</h3>
+
+        <div class="form-group">
+
+          <label>Password Baru</label>
+
+          <input
+            type="password"
+            placeholder="********"
+          >
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div style="margin-top:25px;">
+
+      <button
+        class="save-btn"
+        id="saveBtn"
+      >
+        💾 Simpan Pengaturan
+      </button>
+
+      <div
+        class="success-box"
+        id="successBox"
+      >
+        Pengaturan berhasil disimpan.
+>>>>>>> a2a5284 (style)
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+
+<<<<<<< HEAD
+  // Logout
+  document
+    .getElementById("logoutBtn")
+    .addEventListener("click", () => {
+
+      window.location.href =
+        "login.html";
+
+    });
+
+  // Simpan Profil (sementara)
+  document
+    .getElementById("saveProfile")
+    .addEventListener("click", () => {
+
+      const nama =
+        document.getElementById("nama").value;
+
+      const email =
+        document.getElementById("email").value;
+
+      if(!nama || !email){
+        alert("Lengkapi data terlebih dahulu!");
+        return;
+      }
+
+      const status =
+        document.getElementById("profileStatus");
+
+      status.style.display = "block";
+
+      setTimeout(() => {
+        status.style.display = "none";
+      },3000);
+
+    });
+=======
+document
+.getElementById("logoutBtn")
+.addEventListener("click",()=>{
+
+  window.location.href="login.html";
+
+});
+
+document
+.getElementById("saveBtn")
+.addEventListener("click",()=>{
+
+  const box =
+  document.getElementById("successBox");
+
+  box.style.display="block";
+
+  setTimeout(()=>{
+
+    box.style.display="none";
+
+  },3000);
+
+});
+>>>>>>> a2a5284 (style)
+
+</script>
+
+</body>
+</html>
+<<<<<<< HEAD
+=======
+```
+>>>>>>> a2a5284 (style)
