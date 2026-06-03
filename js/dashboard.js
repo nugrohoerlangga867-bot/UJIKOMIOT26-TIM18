@@ -32,22 +32,34 @@ onValue(sensorRef, (snapshot) => {
 }, () => loadDummy());
 
 function updateStats(data) {
-  // Suhu
   const suhu = data.suhu ?? '--';
-  document.getElementById('statSuhu').textContent = suhu + '°C';
+  const kelembapan = data.kelembapan ?? '--';
+  const tekanan = data.tekanan ?? '--';
+  const cahaya = data.cahaya ?? '--';
+
+  const suhuText = suhu !== '--' ? `${suhu}°C` : '--';
+  const kelembapanText = kelembapan !== '--' ? `${kelembapan}%` : '--';
+  const tekananText = tekanan !== '--' ? `${tekanan} hPa` : '--';
+  const cahayaText = cahaya !== '--' ? `${cahaya} lx` : '--';
+
+  document.getElementById('statSuhu').textContent = suhuText;
+  document.getElementById('statKelembapan').textContent = kelembapanText;
+  document.getElementById('statTekanan').textContent = tekananText;
+  document.getElementById('statCahaya').textContent = cahayaText;
+
+  const suhuNum = Number(suhu);
+  const cahayaNum = Number(cahaya);
+
   const trendSuhu = document.getElementById('trendSuhu');
-  if (trendSuhu && suhu !== '--') {
-    trendSuhu.textContent = suhu > 35 ? '↑ Panas!' : suhu > 28 ? '↑ Normal' : '↓ Dingin';
-    trendSuhu.className = 'trend ' + (suhu > 35 ? 'down' : 'up');
+  if (trendSuhu && Number.isFinite(suhuNum)) {
+    trendSuhu.textContent = suhuNum > 35 ? '↑ Panas!' : suhuNum > 28 ? '↑ Normal' : '↓ Dingin';
+    trendSuhu.className = 'trend ' + (suhuNum > 35 ? 'down' : 'up');
   }
 
-  // Cahaya
-  const cahaya = data.cahaya ?? '--';
-  document.getElementById('statCahaya').textContent = cahaya + ' lx';
   const trendCahaya = document.getElementById('trendCahaya');
-  if (trendCahaya && cahaya !== '--') {
-    trendCahaya.textContent = cahaya > 400 ? '↑ Terang' : cahaya > 100 ? '↑ Redup' : '↓ Gelap';
-    trendCahaya.className = 'trend ' + (cahaya > 100 ? 'up' : 'down');
+  if (trendCahaya && Number.isFinite(cahayaNum)) {
+    trendCahaya.textContent = cahayaNum > 400 ? '↑ Terang' : cahayaNum > 100 ? '↑ Redup' : '↓ Gelap';
+    trendCahaya.className = 'trend ' + (cahayaNum > 100 ? 'up' : 'down');
   }
 }
 
@@ -82,24 +94,35 @@ async function loadDummy() {
 // RELAY CONTROL
 // ====================================
 const relayRef = ref(db, 'relay/1');
-const relayToggle = document.getElementById('relayToggle');
-const relayLabel  = document.getElementById('relayLabel');
-const relayStatus = document.getElementById('relayStatus');
+let relayToggle = null;
+let relayLabel = null;
+let relayStatus = null;
 
-// Dengarkan perubahan relay dari Firebase (realtime)
-onValue(relayRef, (snapshot) => {
-  const val = snapshot.val();
-  const isOn = val === 1 || val === true || val === '1';
-
+function updateRelayUi(isOn) {
   if (relayToggle) relayToggle.checked = isOn;
   if (relayLabel)  relayLabel.textContent = isOn ? 'ON' : 'OFF';
   if (relayLabel)  relayLabel.style.color = isOn ? '#10b981' : 'var(--muted)';
   if (relayStatus) relayStatus.textContent =
     'Status: ' + (isOn ? '🟢 Menyala — perangkat aktif' : '🔴 Mati — perangkat non-aktif');
+}
+
+// Dengarkan perubahan relay dari Firebase (realtime)
+onValue(relayRef, (snapshot) => {
+  const val = snapshot.val();
+  const isOn = val === 1 || val === true || val === '1';
+  updateRelayUi(isOn);
 });
 
-// Ketika toggle diklik → tulis ke Firebase & simpan ke riwayat
-if (relayToggle) {
+window.addEventListener('DOMContentLoaded', () => {
+  relayToggle = document.getElementById('relayToggle');
+  relayLabel = document.getElementById('relayLabel');
+  relayStatus = document.getElementById('relayStatus');
+
+  if (!relayToggle) {
+    console.warn('Relay toggle element tidak ditemukan di dashboard.html');
+    return;
+  }
+
   relayToggle.addEventListener('change', async () => {
     const newState = relayToggle.checked ? 1 : 0;
     const labelState = newState === 1 ? 'ON' : 'OFF';
@@ -117,9 +140,7 @@ if (relayToggle) {
       }
 
       const now = new Date();
-      // Format jam: menit: detik lokal
       const timeStr = now.toTimeString().split(' ')[0];
-      // Format tanggal: YYYY-MM-DD
       const dateStr = now.toISOString().split('T')[0];
 
       history.push({
@@ -130,7 +151,6 @@ if (relayToggle) {
         status: 'OK'
       });
 
-      // Batasi history maksimal 50 baris
       if (history.length > 50) {
         history = history.slice(-50);
       }
@@ -139,8 +159,7 @@ if (relayToggle) {
 
     } catch (err) {
       console.error('Gagal mengubah relay atau mencatat riwayat:', err);
-      // Kembalikan toggle jika gagal
       relayToggle.checked = !relayToggle.checked;
     }
   });
-}
+});

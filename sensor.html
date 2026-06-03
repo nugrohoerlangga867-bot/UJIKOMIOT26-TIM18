@@ -190,19 +190,74 @@ body{
   margin:15px 0;
 }
 
-.badge{
+.switch-card {
+  background:#1e293b;
+  padding:20px;
+  border-radius:24px;
+}
+
+.switch-control {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-top:16px;
+}
+
+.toggle-switch {
+  position:relative;
+  width:56px;
+  height:32px;
   display:inline-block;
-  padding:6px 12px;
+}
+
+.toggle-switch input {
+  opacity:0;
+  width:0;
+  height:0;
+}
+
+.toggle-slider {
+  position:absolute;
+  cursor:pointer;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:#374151;
   border-radius:999px;
-  font-size:13px;
+  transition:.25s;
 }
 
-.online{
-  background:rgba(34,197,94,.15);
-  color:#22c55e;
+.toggle-slider::before {
+  content:'';
+  position:absolute;
+  height:26px;
+  width:26px;
+  left:3px;
+  top:3px;
+  background:white;
+  border-radius:50%;
+  transition:.25s;
 }
 
-.warning{
+.toggle-switch input:checked + .toggle-slider {
+  background:#10b981;
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform:translateX(24px);
+}
+
+.switch-info h2 {
+  margin:0;
+}
+
+.switch-info p {
+  margin:6px 0 0;
+  color:#94a3b8;
+  font-size:14px;
+}
   background:rgba(245,158,11,.15);
   color:#f59e0b;
 }
@@ -433,6 +488,20 @@ tr:hover{
 
       </div>
 
+      <div class="switch-card">
+        <div class="sensor-label">🔌 Relay 1</div>
+        <div class="switch-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="relayToggle">
+            <span class="toggle-slider"></span>
+          </label>
+          <div class="switch-info">
+            <h2 id="relayLabel">OFF</h2>
+            <p id="relayStatus">Status: menunggu...</p>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <section class="panel">
@@ -509,7 +578,10 @@ tr:hover{
 
 </div>
 
-<script>
+<script type="module">
+
+import { db } from './js/firebase-config.js';
+import { ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 document.getElementById("logoutBtn")
 .addEventListener("click",()=>{
@@ -566,6 +638,55 @@ new Chart(ctx,{
 
 });
 
+import { db } from './js/firebase-config.js';
+import { ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const relayRef = ref(db, 'relay/1');
+const relayToggle = document.getElementById('relayToggle');
+const relayLabel = document.getElementById('relayLabel');
+const relayStatus = document.getElementById('relayStatus');
+
+function setRelayUi(isOn) {
+  if (relayToggle) relayToggle.checked = isOn;
+  if (relayLabel) relayLabel.textContent = isOn ? 'ON' : 'OFF';
+  if (relayLabel) relayLabel.style.color = isOn ? '#10b981' : '#94a3b8';
+  if (relayStatus) relayStatus.textContent = 'Status: ' + (isOn ? '🟢 Menyala — perangkat aktif' : '🔴 Mati — perangkat non-aktif');
+}
+
+if (relayToggle) {
+  relayToggle.addEventListener('change', async () => {
+    const newState = relayToggle.checked ? 1 : 0;
+    try {
+      await set(relayRef, newState);
+      setRelayUi(newState === 1);
+
+      const historyRef = ref(db, 'sensor/history');
+      const historySnapshot = await get(historyRef);
+      let history = historySnapshot.val() || [];
+      if (!Array.isArray(history)) history = history ? Object.values(history) : [];
+
+      const now = new Date();
+      history.push({
+        waktu: now.toTimeString().split(' ')[0],
+        tanggal: now.toISOString().split('T')[0],
+        sensor: 'Relay 1',
+        nilai: newState === 1 ? 'ON' : 'OFF',
+        status: 'OK'
+      });
+
+      if (history.length > 50) history = history.slice(-50);
+      await set(historyRef, history);
+    } catch (err) {
+      console.error('Gagal ubah relay:', err);
+      relayToggle.checked = !relayToggle.checked;
+    }
+  });
+}
+
+onValue(relayRef, (snapshot) => {
+  const val = snapshot.val();
+  setRelayUi(val === 1 || val === true || val === '1');
+});
 </script>
 
 </body>

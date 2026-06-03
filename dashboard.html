@@ -129,6 +129,75 @@ body{
   transition:.3s;
 }
 
+.switch-card {
+  background:#1e293b;
+  padding:20px;
+  border-radius:20px;
+}
+
+.switch-control {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-top:16px;
+}
+
+.toggle-switch {
+  position:relative;
+  width:56px;
+  height:32px;
+  display:inline-block;
+}
+
+.toggle-switch input {
+  opacity:0;
+  width:0;
+  height:0;
+}
+
+.toggle-slider {
+  position:absolute;
+  cursor:pointer;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:#374151;
+  border-radius:999px;
+  transition:.25s;
+}
+
+.toggle-slider::before {
+  content:'';
+  position:absolute;
+  height:26px;
+  width:26px;
+  left:3px;
+  top:3px;
+  background:white;
+  border-radius:50%;
+  transition:.25s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background:#10b981;
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform:translateX(24px);
+}
+
+.switch-info h2 {
+  margin:0;
+}
+
+.switch-info p {
+  margin:6px 0 0;
+  color:#94a3b8;
+  font-size:14px;
+}
+
 .stat-card:hover{
   transform:translateY(-5px);
 }
@@ -295,22 +364,36 @@ body{
 
       <div class="stat-card">
         <small>Suhu</small>
-        <h2 id="suhu">28°C</h2>
+        <h2 id="statSuhu">28°C</h2>
       </div>
 
       <div class="stat-card">
         <small>Kelembapan</small>
-        <h2 id="kelembapan">75%</h2>
+        <h2 id="statKelembapan">75%</h2>
       </div>
 
       <div class="stat-card">
         <small>Tekanan</small>
-        <h2 id="tekanan">1008 hPa</h2>
+        <h2 id="statTekanan">1008 hPa</h2>
       </div>
 
       <div class="stat-card">
         <small>Cahaya</small>
-        <h2 id="cahaya">640 lx</h2>
+        <h2 id="statCahaya">640 lx</h2>
+      </div>
+
+      <div class="switch-card">
+        <small>Relay 1</small>
+        <div class="switch-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="relayToggle">
+            <span class="toggle-slider"></span>
+          </label>
+          <div class="switch-info">
+            <h2 id="relayLabel">OFF</h2>
+            <p id="relayStatus">Status: menunggu...</p>
+          </div>
+        </div>
       </div>
 
     </section>
@@ -384,39 +467,20 @@ body{
           <thead>
             <tr>
               <th>Waktu</th>
-              <th>Suhu</th>
-              <th>Kelembapan</th>
-              <th>Tekanan</th>
-              <th>Cahaya</th>
+              <th>Sensor</th>
+              <th>Nilai</th>
+              <th>Status</th>
             </tr>
           </thead>
 
-          <tbody>
-
+          <tbody id="dataTable">
             <tr>
-              <td>08:00</td>
-              <td>28°C</td>
-              <td>75%</td>
-              <td>1008 hPa</td>
-              <td>640 lx</td>
+              <td>--</td>
+              <td>Menunggu data</td>
+              <td>--</td>
+              <td>--</td>
+              <td>--</td>
             </tr>
-
-            <tr>
-              <td>09:00</td>
-              <td>29°C</td>
-              <td>73%</td>
-              <td>1007 hPa</td>
-              <td>650 lx</td>
-            </tr>
-
-            <tr>
-              <td>10:00</td>
-              <td>30°C</td>
-              <td>72%</td>
-              <td>1006 hPa</td>
-              <td>670 lx</td>
-            </tr>
-
           </tbody>
 
         </table>
@@ -429,61 +493,9 @@ body{
 
 </div>
 
-<script>
-
-document
-.getElementById("logoutBtn")
-.addEventListener("click",()=>{
-
-  window.location.href="login.html";
-
-});
-
-const ctx =
-document.getElementById("sensorChart");
-
-new Chart(ctx,{
-
-  type:"line",
-
-  data:{
-    labels:[
-      "08:00",
-      "09:00",
-      "10:00",
-      "11:00",
-      "12:00",
-      "13:00"
-    ],
-
-    datasets:[{
-
-      label:"Suhu",
-
-      data:[
-        28,
-        29,
-        30,
-        29,
-        31,
-        30
-      ],
-
-      borderColor:"#7c3aed",
-      backgroundColor:"rgba(124,58,237,.2)",
-      fill:true,
-      tension:.4
-
-    }]
-  },
-
-  options:{
-    responsive:true
-  }
-
-});
-
-</script>
+<script src="js/main.js"></script>
+<script src="js/sensorChart.js"></script>
+<script type="module" src="js/dashboard.js"></script>
 
 </body>
 </html>

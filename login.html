@@ -1,382 +1,242 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Login | Monitoring IoT</title>
+<title>Login | Monitoring IoT</title>
 
-  <!-- ICON -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-  />
+<style>
 
-  <style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:Arial, sans-serif;
-    }
+body{
+  min-height:100vh;
+  background:#0f172a;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+}
 
-    body{
-      background:#0f172a;
-      color:white;
-      overflow:hidden;
-    }
+.login-card{
+  width:420px;
+  background:#1e293b;
+  padding:35px;
+  border-radius:24px;
+  box-shadow:0 15px 40px rgba(0,0,0,.3);
+}
 
-    .login-body{
-      min-height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      padding:20px;
-    }
+.login-header{
+  text-align:center;
+  margin-bottom:30px;
+}
 
-    .login-wrapper{
-      width:100%;
-      max-width:1100px;
-      background:#111827;
-      border-radius:30px;
-      overflow:hidden;
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      box-shadow:0 10px 40px rgba(0,0,0,0.4);
-    }
+.login-header h1{
+  margin-bottom:10px;
+}
 
-    /* LEFT */
-    .login-card{
-      padding:50px;
-    }
+.login-header p{
+  color:#94a3b8;
+}
 
-    .login-brand{
-      margin-bottom:40px;
-    }
+.form-group{
+  margin-bottom:20px;
+}
 
-    .login-brand img{
-      width:70px;
-      margin-bottom:20px;
-    }
+.form-group label{
+  display:block;
+  margin-bottom:8px;
+  color:#cbd5e1;
+}
 
-    .login-brand h1{
-      font-size:32px;
-      margin-bottom:10px;
-    }
+.form-group input{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:#111827;
 
-    .login-brand p{
-      color:#94a3b8;
-      line-height:1.6;
-    }
+  /* FIX TEXT */
+  color:white;
 
-    /* FORM */
-    .login-form{
-      display:flex;
-      flex-direction:column;
-      gap:20px;
-    }
+  outline:none;
+}
 
-    .form-group{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
+.form-group input::placeholder{
+  color:#64748b;
+}
 
-    .form-group label{
-      font-size:14px;
-      color:#cbd5e1;
-    }
+/* PASSWORD */
 
-    .form-group input{
-      padding:15px;
-      border:none;
-      border-radius:14px;
-      background:#1e293b;
-      color:#f8fafc;
-      outline:none;
-      font-size:15px;
-    }
+.password-wrapper{
+  position:relative;
+}
 
-    .form-group input::placeholder{
-      color:#94a3b8;
-    }
+.password-wrapper input{
+  padding-right:50px;
+}
 
-    /* FIX AUTOFILL */
-    input:-webkit-autofill,
-    input:-webkit-autofill:hover,
-    input:-webkit-autofill:focus{
-      -webkit-text-fill-color:#f8fafc;
-      transition:background-color 5000s ease-in-out 0s;
-      box-shadow:0 0 0px 1000px #1e293b inset;
-    }
+.toggle-password{
+  position:absolute;
+  right:15px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  user-select:none;
+  font-size:18px;
+}
 
-    /* PASSWORD */
-    .password-wrapper{
-      position:relative;
-    }
+/* REMEMBER */
 
-    .password-wrapper input{
-      width:100%;
-      padding-right:50px;
-    }
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
 
-    .toggle-password{
-      position:absolute;
-      right:18px;
-      top:50%;
-      transform:translateY(-50%);
-      cursor:pointer;
-      color:#94a3b8;
-      transition:0.3s;
-    }
+.row a{
+  color:#a78bfa;
+  text-decoration:none;
+}
 
-    .toggle-password:hover{
-      color:white;
-    }
+/* BUTTON */
 
-    /* ROW */
-    .form-row{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      font-size:14px;
-      color:#cbd5e1;
-    }
+.login-btn{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:#7c3aed;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.3s;
+}
 
-    .link{
-      color:#a78bfa;
-      text-decoration:none;
-    }
+.login-btn:hover{
+  background:#6d28d9;
+}
 
-    .link:hover{
-      text-decoration:underline;
-    }
+.message{
+  text-align:center;
+  margin-top:15px;
+  color:#f87171;
+}
 
-    /* BUTTON */
-    .btn{
-      padding:15px;
-      border:none;
-      border-radius:14px;
-      background:#7c3aed;
-      color:white;
-      font-size:15px;
-      font-weight:bold;
-      cursor:pointer;
-      transition:0.3s;
-    }
-
-    .btn:hover{
-      background:#6d28d9;
-      transform:translateY(-2px);
-    }
-
-    .form-message{
-      text-align:center;
-      font-size:14px;
-    }
-
-    /* RIGHT */
-    .login-art{
-      background:linear-gradient(135deg,#7c3aed,#4f46e5);
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      padding:50px;
-    }
-
-    .art-content{
-      max-width:400px;
-    }
-
-    .art-content h2{
-      font-size:50px;
-      line-height:1.2;
-      margin-bottom:20px;
-    }
-
-    .art-content p{
-      line-height:1.8;
-      color:#e9d5ff;
-    }
-
-    /* RESPONSIVE */
-    @media(max-width:900px){
-
-      body{
-        overflow:auto;
-      }
-
-      .login-wrapper{
-        grid-template-columns:1fr;
-      }
-
-      .login-art{
-        display:none;
-      }
-
-    }
-
-  </style>
+</style>
 </head>
 
-<body class="login-body">
+<body>
 
-<div class="login-wrapper">
+<div class="login-card">
 
-  <!-- LOGIN -->
-  <div class="login-card">
+  <div class="login-header">
+    <h1>Monitoring IoT</h1>
+    <p>Masuk untuk melanjutkan</p>
+  </div>
 
-    <div class="login-brand">
+  <form id="loginForm">
 
-      <img src="img/logo.png" alt="Logo">
+    <div class="form-group">
 
-      <h1>Selamat Datang Kembali</h1>
+      <label>Email</label>
 
-      <p>
-        Masuk untuk mengakses dashboard monitoring IoT Anda
-      </p>
+      <input
+        type="email"
+        id="email"
+        placeholder="nama@email.com"
+        required
+      >
 
     </div>
 
-    <form id="loginForm" class="login-form">
+    <div class="form-group">
 
-      <!-- EMAIL -->
-      <div class="form-group">
+      <label>Password</label>
 
-        <label>Email</label>
+      <div class="password-wrapper">
 
         <input
-          type="email"
-          id="email"
-          placeholder="nama@email.com"
+          type="password"
+          id="password"
+          placeholder="Masukkan password"
           required
         >
 
-      </div>
-
-      <!-- PASSWORD -->
-      <div class="form-group">
-
-        <label>Password</label>
-
-        <div class="password-wrapper">
-
-          <input
-            type="password"
-            id="password"
-            placeholder="••••••••"
-            required
-          >
-
-          <!-- ICON MATA -->
-          <i
-            class="fa-solid fa-eye toggle-password"
-            id="togglePassword"
-          ></i>
-
-        </div>
+        <span
+          class="toggle-password"
+          id="togglePassword"
+        >
+          👁️
+        </span>
 
       </div>
-
-      <!-- OPTIONS -->
-      <div class="form-row">
-
-        <label>
-          <input type="checkbox">
-          Ingat saya
-        </label>
-
-        <a href="#" class="link">
-          Lupa password?
-        </a>
-
-      </div>
-
-      <!-- BUTTON -->
-      <button type="submit" class="btn">
-        Masuk
-      </button>
-
-      <p id="loginMessage" class="form-message"></p>
-
-    </form>
-
-  </div>
-
-  <!-- RIGHT SIDE -->
-  <div class="login-art">
-
-    <div class="art-content">
-
-      <h2>
-        Monitoring <br>
-        Lebih Cerdas
-      </h2>
-
-      <p>
-        Pantau seluruh sensor IoT Anda dalam
-        satu dashboard modern dan realtime.
-      </p>
 
     </div>
 
-  </div>
+    <div class="row">
+
+      <label>
+        <input type="checkbox">
+        Ingat saya
+      </label>
+
+      <a href="#">
+        Lupa Password?
+      </a>
+
+    </div>
+
+    <button
+      type="submit"
+      class="login-btn"
+    >
+      Masuk
+    </button>
+
+    <p id="loginMessage" class="message"></p>
+
+  </form>
 
 </div>
 
-<!-- SCRIPT -->
 <script>
 
-  // SHOW PASSWORD
-  const togglePassword =
-    document.getElementById("togglePassword");
+// SHOW PASSWORD
 
-  const password =
-    document.getElementById("password");
+const togglePassword =
+document.getElementById("togglePassword");
 
-  togglePassword.addEventListener("click", () => {
+const password =
+document.getElementById("password");
 
-    const type =
-      password.type === "password"
-      ? "text"
-      : "password";
+togglePassword.addEventListener("click",()=>{
 
-    password.type = type;
+  if(password.type==="password"){
 
-    togglePassword.classList.toggle("fa-eye");
+    password.type="text";
+    togglePassword.textContent="🙈";
 
-    togglePassword.classList.toggle("fa-eye-slash");
+  }else{
 
-  });
+    password.type="password";
+    togglePassword.textContent="👁️";
 
-  // LOGIN
-  const loginForm =
-    document.getElementById("loginForm");
+  }
 
-  const loginMessage =
-    document.getElementById("loginMessage");
-
-  loginForm.addEventListener("submit", (e) => {
-
-    e.preventDefault();
-
-    loginMessage.style.color = "#22c55e";
-
-    loginMessage.innerText =
-      "Login berhasil...";
-
-    // REDIRECT
-    setTimeout(() => {
-
-      window.location.href =
-        "dashboard.html";
-
-    }, 1000);
-
-  });
+});
 
 </script>
+
+<script type="module" src="js/auth.js"></script>
 
 </body>
 </html>
